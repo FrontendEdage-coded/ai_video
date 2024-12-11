@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+Dockerfile.railway
+docker-compose.yml
+.dockerignore
+.env
+myenv
+public/videos
+video_processing.log
+*.log
