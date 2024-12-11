@@ -150,7 +150,7 @@ const Pricing: NextPageWithLayout = () => {
         }
       });
   };
-  
+
 
   useEffect(() => {
     if (id) {
@@ -185,119 +185,109 @@ const Pricing: NextPageWithLayout = () => {
 
   return (
     <FrontLayout>
-      <div className="max-w-5xl mx-auto px-3 text-center text-slate-950">
-        <h1 className="text-4xl md:text-5xl font-semibold font-display my-8">
+      <div className="max-w-6xl mx-auto px-4 text-center text-slate-950">
+        <h1 className="text-4xl md:text-5xl font-semibold font-display my-10 text-gray-900">
           {t('Plans')}
         </h1>
-        <p className="text-xl font-sans font-normal text-slate-600 my-8">
+        <p className="text-xl font-sans font-light text-slate-600 mb-10">
           {t('no-hidden-fee')}
         </p>
-        <div className="max-w-5xl mx-auto px-3 text-center">
-          <div className="mx-auto mb-8 inline-flex gap-2 items-center justify-center bg-slate-200 p-1 rounded-2xl">
-            <button
-              onClick={() => setPlanType('monthly')}
-              className={`px-6 py-3 h-12 rounded-xl ${
-                planType === 'monthly' ? 'border bg-white text-slate-950' : 'bg-transparent text-slate-950'
+        <div className="mb-10 inline-flex gap-3 items-center justify-center bg-slate-100 p-2 rounded-xl">
+          <button
+            onClick={() => setPlanType('monthly')}
+            className={`px-6 py-3 h-12 rounded-full transition-all ease-in-out duration-300 ${planType === 'monthly'
+              ? 'bg-white text-slate-950 shadow-lg border border-slate-300'
+              : 'bg-transparent text-slate-950'
               }`}
-            >
-              <span className="text-sm font-semibold">{t('Monthly')}</span>
-            </button>
-            <button
-              onClick={() => setPlanType('yearly')}
-              className={`px-6 py-3 h-12  rounded-xl ${
-                planType === 'yearly' ? 'border bg-white text-slate-950' : 'bg-transparent text-slate-950'
+          >
+            <span className="text-sm font-semibold">{t('Monthly')}</span>
+          </button>
+          <button
+            onClick={() => setPlanType('yearly')}
+            className={`px-6 py-3 h-12 rounded-full transition-all ease-in-out duration-300 ${planType === 'yearly'
+              ? 'bg-white text-slate-950 shadow-lg border border-slate-300'
+              : 'bg-transparent text-slate-950'
               }`}
+          >
+            <span className="text-sm font-semibold">{t('Yearly')}</span>
+            <span className="text-xs font-normal rounded-full px-2 py-0.5 bg-green-300 text-green-950 ml-2">
+              {t('save-190')}
+            </span>
+          </button>
+        </div>
+        <div className="flex flex-col md:flex-row gap-10 justify-center">
+          {pricingPlans[planType]?.map((plan) => (
+            <section
+              key={plan.id}
+              className={`flex-1 p-8 bg-white rounded-2xl shadow-lg relative transition-all ease-in-out duration-300 transform hover:scale-105 hover:shadow-xl`}
             >
-              <span className="text-sm font-semibold">{t('Yearly')}</span>
-              <span className="text-xs font-normal rounded-full px-2 py-0.5 bg-green-300 text-green-950 ml-2">
-                {t('save-190')}
-              </span>
-            </button>
-          </div>
-          <div className="flex flex-col md:flex-row gap-8 justify-center">
-            {pricingPlans[planType]?.map((plan: any) => (
-              <section
-                key={plan.id}
-                className={`flex-1 p-12 rounded-2xl relative ${plan.cardClass}`}
-              >
+              {currentSubscription && currentSubscription.stripe_priceId === plan.stripe_priceId && (
+                <span className="bg-green-500 text-white text-base font-medium absolute -top-6 left-[50%] transform -translate-x-1/2 px-5 py-1 rounded-full shadow-md">
+                  {t('current-plan')}
+                </span>
+              )}
+              <div className="flex flex-col justify-center items-center text-center">
+                <h2 className="text-2xl font-semibold mb-6 text-slate-900">{plan.name}</h2>
+                <h3 className="text-4xl md:text-5xl font-semibold mt-6 flex items-baseline text-slate-900">
+                  <span>{plan.price}</span>
+                  <p className="text-lg font-normal text-slate-600">{plan.period}</p>
+                </h3>
                 {currentSubscription &&
-                  currentSubscription.stripe_priceId === plan.stripe_priceId && (
-                    <span className="bg-[#333030] text-white text-base font-medium absolute -top-[17px] left-[86px] px-5 py-1 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-                      {t('current-plan')}
-                    </span>
-                  )}
-                <div className="flex-col flex justify-center items-center text-center">
-                  <h2 className="text-2xl font-semibold mb-4">{plan.name}</h2>
-                  <div className="flex-1 flex justify-center">
-                    <div className="h-auto flex gap-2 items-center"></div>
-                  </div>
-                  <h3 className="text-4xl md:text-5xl font-semibold mt-8 flex items-baseline">
-                    <span>{plan.price}</span>
-                    <p className="text-lg font-sans font-normal">{plan.period}</p>
-                  </h3>
-                  {currentSubscription &&
                   currentSubscription.stripe_priceId === plan.stripe_priceId ? (
-                    <Link href="/dashboard/manageSubscription">
-                      <button
-                        className={`mt-8 w-full px-6 py-3 h-12 rounded-xl ${plan.buttonClass} relative flex items-center gap-2 justify-center border transition-none`}
-                      >
-                        <span className="text-sm font-semibold whitespace-nowrap">
-                          {t('manage-subscription-card')}
-                        </span>
-                      </button>
-                    </Link>
-                  ) : (
+                  <Link href="/dashboard/manageSubscription">
                     <button
-                      className={`mt-8 w-full px-6 py-3 h-12 rounded-xl ${plan.buttonClass} relative flex items-center gap-2 justify-center border transition-none`}
-                      onClick={() =>
-                        handleGetStarted(plan.id, plan.price, plan.name)
-                      }
+                      className={`mt-8 w-full px-6 py-3 h-12 rounded-lg text-white ${plan.buttonClass} relative flex items-center gap-2 justify-center`}
                     >
                       <span className="text-sm font-semibold whitespace-nowrap">
-                        {plan.buttonText}
+                        {t('manage-subscription-card')}
                       </span>
                     </button>
-                  )}
-                  <p className="text-sm font-normal mt-4 text-slate-500">
-                    {t('secured-stripe')}
-                  </p>
-                  <ul className="flex-1 self-start flex flex-col mt-8 gap-4 w-full">
-                    {plan.features.map((feature: string) => (
-                      <li
-                        key={feature}
-                        className="flex gap-2 items-center text-left"
+                  </Link>
+                ) : (
+                  <button
+                    className={`mt-8 w-full px-6 py-3 h-12 rounded-lg text-white ${plan.buttonClass} relative flex items-center gap-2 justify-center`}
+                    onClick={() => handleGetStarted(plan.id, plan.price, plan.name)}
+                  >
+                    <span className="text-sm font-semibold whitespace-nowrap">
+                      {plan.buttonText}
+                    </span>
+                  </button>
+                )}
+                <p className="text-sm font-normal mt-6 text-slate-500">{t('secured-stripe')}</p>
+                <ul className="flex-1 self-start flex flex-col mt-6 gap-4 w-full text-left">
+                  {plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex gap-3 items-center text-slate-600">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-5 h-5 text-green-500"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                          aria-hidden="true"
-                          className="w-5 h-5 shrink-0"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          ></path>
-                        </svg>
-                        <p className="text-sm font-normal">{feature}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </section>
-            ))}
-          </div>
-          <p className="text-sm font-normal mt-8 text-slate-700">
-            {t('need-more')}{' '}
-            <a className="text-slate-500" href="https://discord.gg/KcAcHdrSQU">
-              {t('lets-talk')}
-            </a>
-          </p>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        ></path>
+                      </svg>
+                      <p className="text-sm font-normal">{feature}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+          ))}
         </div>
+        <p className="text-sm font-normal mt-10 mb-6 text-slate-700">
+          {t('need-more')}{' '}
+          <a className="text-slate-500 hover:text-slate-700 font-semibold" href="https://discord.gg/KcAcHdrSQU">
+            {t('lets-talk')}
+          </a>
+        </p>
+
       </div>
+
     </FrontLayout>
   );
 };
